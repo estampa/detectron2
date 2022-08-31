@@ -39,7 +39,7 @@ class _DetectedInstance:
 
 
 class VideoVisualizer:
-    def __init__(self, metadata, instance_mode=ColorMode.IMAGE, show_labels=True):
+    def __init__(self, metadata, instance_mode=ColorMode.IMAGE, show_labels=True, show_masks=True):
         """
         Args:
             metadata (MetadataCatalog): image metadata.
@@ -52,6 +52,7 @@ class VideoVisualizer:
         ], "Other mode not supported yet."
         self._instance_mode = instance_mode
         self._show_labels = show_labels
+        self._show_masks = show_masks
         self._max_num_instances = self.metadata.get("max_num_instances", 74)
         self._assigned_colors = {}
         self._color_pool = random_colors(self._max_num_instances, rgb=True, maximum=1)
@@ -119,6 +120,9 @@ class VideoVisualizer:
             alpha = 0.3
         else:
             alpha = 0.5
+
+        if not self._show_masks:
+            alpha = 0
 
         labels = (
             None
